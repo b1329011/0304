@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <title>資工選課表</title>
+    <style>
+        table {
+            font-family: Arial, Helvetica, sans-serif;
+            border-collapse: collapse;
+            width: 100%;
+        }
+
+        td, th {
+            border: 1px solid #ddd;
+            padding: 6px;
+            vertical-align: middle; /* 垂直居中對齊 */
+        }
+
+        tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+
+        tr:hover {
+            background-color: #ddd;
+        }
+
+        th {
+            padding-top: 12px;
+            padding-bottom: 12px;
+            text-align: left;
+            background-color: #04AA6D;
+            color: white;
+        }
+
+        /* Popover 的樣式 (高級功能) */
+        #popover {
+            display: none; /* 預設隱藏 */
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: white;
+            padding: 20px;
+            border: 1px solid #ddd;
+            box-shadow: 2px 2px 10px rgba(0,0,0,0.1);
+            z-index: 1000;
+            width: 300px;
+            border-radius: 8px; /* 圓角 */
+        }
+
+        #popover h3 { margin-top: 0; color: #04AA6D; }
+        #popover p { margin-bottom: 5px; }
+
+        /* 當 Popover 顯示時的背景遮罩 */
+        #popover-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.5);
+            z-index: 999;
+        }
+
+        td button.info-btn {
+            background: none;
+            border: none;
+            color: blue;
+            text-decoration: underline;
+            cursor: pointer;
+            font-size: 16px;
+            padding: 0;
+        }
+
+        td button.info-btn:hover {
+            text-decoration: none;
+        }
+
+        #change-btn {
+            margin-top: 10px;
+            padding: 8px 16px;
+            background-color: #337ab7;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        #change-btn:hover {
+            background-color: #286090;
+        }
+    </style>
+</head>
+<body>
+
+    <h2>資工選課表</h2>
+
+    <table id="csie">
+        <thead>
+            <tr>
+                <th>開課單位</th>
+                <th>課程名稱</th>
+                <th>授課教師</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>資工系</td>
+                <td><button class="info-btn" onclick="showPopover(this)">物件導向軟體設計</button></td>
+                <td>黃崇源</td>
+            </tr>
+            <tr>
+                <td>資工系</td>
+                <td><button class="info-btn" onclick="showPopover(this)">計算機網路實驗</button></td>
+                <td>李春良</td>
+            </tr>
+            <tr>
+                <td>資工系</td>
+                <td><button class="info-btn" onclick="showPopover(this)">作業系統實務</button></td>
+                <td>張哲維</td>
+            </tr>
+            <tr>
+                <td>資工系</td>
+                <td><button class="info-btn" onclick="showPopover(this)">生物統計</button></td>
+                <td>陳光武</td>
+            </tr>
+            <tr>
+                <td>資工系</td>
+                <td><button class="info-btn" onclick="showPopover(this)">通訊系統</button></td>
+                <td>陳仁暉</td>
+            </tr>
+            <tr>
+                <td>資工系</td>
+                <td><button class="info-btn" onclick="showPopover(this)">軟硬體專題(2)</button></td>
+                <td>魏志達</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <button id="change-btn" onclick="changeResult()">Change</button>
+
+    <div id="popover-overlay" onclick="closePopover()"></div> <div id="popover">
+        <h3 id="popover-title">課程資訊</h3>
+        <p><strong>學年/學期：</strong> <span id="popover-term">114/2</span></p>
+        <p><strong>開課單位：</strong> <span id="popover-dept"></span></p>
+        <p><strong>授課教師：</strong> <span id="popover-teacher"></span></p>
+        <p><strong>科目代號：</strong> <span id="popover-code">A2337</span></p> <div style="text-align: right; margin-top: 15px;">
+            <button onclick="closePopover()">關閉</button>
+        </div>
+    </div>
+
+    <script>
+
+        function changeResult() {
+            var myTable = document.getElementById("csie");
+            myTable.rows[1].cells[2].innerHTML = "李春良";
+        }
+
+        function showPopover(buttonElement) {
+            const overlay = document.getElementById('popover-overlay');
+            const popover = document.getElementById('popover');
+  
+            const td = buttonElement.parentNode;
+            const tr = td.parentNode;
+            const dept = tr.cells[0].innerHTML;
+            const courseName = buttonElement.innerHTML; 
+            const teacher = tr.cells[2].innerHTML;
+
+            document.getElementById('popover-title').innerHTML = courseName;
+            document.getElementById('popover-dept').innerHTML = dept;
+            document.getElementById('popover-teacher').innerHTML = teacher;
+
+            overlay.style.display = 'block';
+            popover.style.display = 'block';
+        }
+
+        function closePopover() {
+            document.getElementById('popover-overlay').style.display = 'none';
+            document.getElementById('popover').style.display = 'none';
+        }
+    </script>
+
+</body>
+</html>
