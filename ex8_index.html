@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>景點觀光展覽資訊 - Ajax 實作</title>
+    
+    <style>
+        /* CSS 樣式區塊 */
+        body {
+            font-family: "Microsoft JhengHei", Arial, sans-serif;
+            padding: 40px;
+            background-color: #f9f9f9;
+        }
+
+        h1 {
+            border-left: 5px solid #00b06b;
+            padding-left: 15px;
+            color: #333;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            background-color: white;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+
+        th {
+            background-color: #00b06b; /* 綠色標頭 */
+            color: white;
+            padding: 12px;
+            text-align: left;
+        }
+
+        td {
+            padding: 12px;
+            border-bottom: 1px solid #ddd;
+            font-size: 14px;
+        }
+
+        tr:nth-child(even) {
+            background-color: #f2f2f2; /* 斑馬紋 */
+        }
+
+        tr:hover {
+            background-color: #e9f7ef; /* 滑鼠移上去變淡綠色 */
+        }
+
+        button {
+            padding: 10px 20px;
+            background-color: #dc3545;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        button:hover {
+            background-color: #a71d2a;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>景點觀光展覽資訊</h1>
+
+    <table id="csie">
+        <thead>
+            <tr>
+                <th>名稱</th>
+                <th>地點</th>
+                <th>票價</th>
+            </tr>
+        </thead>
+        <tbody>
+            </tbody>
+    </table>
+
+    <button onclick="delOldData()">刪除舊資料 (delOldData)</button>
+
+    <script>
+        // --- JavaScript 區塊 ---
+        
+        var openUrl = "https://cloud.culture.tw/frontsite/trans/SearchShowAction.do?method=doFindTypeJ&category=6";
+        var xhr = new XMLHttpRequest();
+        
+        xhr.open('GET', openUrl, true);
+        xhr.send();
+
+        xhr.onreadystatechange = function() {
+            if (this.readyState == 4 && this.status == 200) {
+                var dataset = JSON.parse(this.responseText);
+                addNewData(dataset);
+            }
+        };
+
+        function addNewData(dataset) {
+            var myTable = document.getElementById("csie");
+            
+            dataset.forEach(function(data) {
+                // 插入新行到表格末尾
+                var row = myTable.insertRow(-1);
+                
+                // 插入名稱
+                row.insertCell(0).innerHTML = data['title'];
+                
+                // 插入地點與票價 (判斷 showInfo 是否有資料)
+                if (data['showInfo'] && data['showInfo'].length > 0) {
+                    row.insertCell(1).innerHTML = data['showInfo'][0]['location'];
+                    row.insertCell(2).innerHTML = data['showInfo'][0]['price'];
+                } else {
+                    row.insertCell(1).innerHTML = "暫無資訊";
+                    row.insertCell(2).innerHTML = "免費或未提供";
+                }
+            });
+        }
+
+        function delOldData() {
+            var myTable = document.getElementById("csie");
+            // 保留標頭 (第 0 行)，刪除其餘所有行
+            while (myTable.rows.length > 1) {
+                myTable.deleteRow(1);
+            }
+        }
+    </script>
+
+</body>
+</html>
