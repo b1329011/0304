@@ -1,0 +1,26 @@
+import React from 'react';
+
+
+const changeText = (event) => {
+  event.target.innerText = event.target.innerText + "被點了";
+};
+
+function App() {
+  const styleArgument = {
+    fontSize: '50px', 
+    textAlign: 'center', 
+    marginTop: '100px',
+    cursor: 'pointer'
+  };
+
+  return (
+    <div className="App">
+      {}
+      <h1 style={styleArgument} onClick={changeText}>
+        hello CGU!!
+      </h1>
+    </div>
+  );
+}
+
+export default App;
